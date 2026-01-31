@@ -5,72 +5,46 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "class")
+@Table(name = "classes")
 public class Classroom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "class_id")
     private Long classId;
-    private String className;
-    private int capacity;
-    @ManyToMany
-    private List<Student> students;
-    private List<Teacher> teachers;
-    @ManyToMany
-    private List<Subject> subjects;
 
-    public Long getClassId() {
-        return classId;
-    }
+    @Column(name = "class_code", nullable = false, unique = true)
+    private String classCode;
 
-    public void setClassId(Long classId) {
-        this.classId = classId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "subject_id", nullable = false)
+    private Subject subject;
 
-    public String getClassName() {
-        return className;
-    }
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
+    @Column(name = "term", nullable = false)
+    private String term;
 
-    public int getCapacity() {
-        return capacity;
-    }
+    @Column(name = "start_date")
+    private java.time.LocalDate startDate;
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
+    @Column(name = "end_date")
+    private java.time.LocalDate endDate;
 
-    public List<Student> getStudents() {
-        return students;
-    }
+    @Column(name = "room")
+    private String room;
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
+    @Column(name = "max_students", nullable = false)
+    private int maxStudents;
 
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
+    @Column(name = "status", nullable = false)
+    private String status; // OPEN / CLOSED
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
-    }
-
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
-    }
+    @Column(name = "created_at", nullable = false)
+    private java.time.LocalDateTime createdAt;
 }
-

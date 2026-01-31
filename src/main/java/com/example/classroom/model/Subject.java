@@ -1,14 +1,9 @@
 package com.example.classroom.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,61 +11,20 @@ import java.util.List;
 @Entity
 @Table(name = "subjects")
 public class Subject {
-    private  Long subjectId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "subject_id")
+    private Long subjectId;
+
+    @Column(name = "subject_code", nullable = false, unique = true)
+    private String subjectCode;
+
+    @Column(name = "subject_name", nullable = false)
     private String subjectName;
+
+    @Column(name = "credits", nullable = false)
+    private int credits;
+
+    @Column(name = "description")
     private String description;
-    @ManyToMany
-    private List<Student> students;
-    @ManyToMany
-    private List<Teacher> teachers;
-    @ManyToMany
-    private List<Classroom> classrooms;
-
-    public Long getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(Long subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
-    }
-
-    public List<Classroom> getClassrooms() {
-        return classrooms;
-    }
-
-    public void setClassrooms(List<Classroom> classrooms) {
-        this.classrooms = classrooms;
-    }
 }

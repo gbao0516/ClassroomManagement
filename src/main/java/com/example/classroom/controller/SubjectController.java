@@ -1,7 +1,7 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.DTO.Request.SubjectCreationRequest;
-import com.example.classroom.DTO.Request.SubjectCreationResponse;
+import com.example.classroom.DTO.Response.SubjectCreationResponse;
 import com.example.classroom.model.Subject;
 import com.example.classroom.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/subjects")
 public class SubjectController {
-    private SubjectService subjectService;
+    private final SubjectService subjectService;
 
     @GetMapping
     public List<Subject> getAllSubjects() {
@@ -21,24 +21,22 @@ public class SubjectController {
     }
 
     @PostMapping
-    public SubjectCreationResponse createSubject(SubjectCreationRequest request) {
+    public SubjectCreationResponse createSubject(@RequestBody SubjectCreationRequest request) {
         return subjectService.createSubject(request);
     }
 
     @GetMapping("/{id}")
-    public Subject getSubjectById( @PathVariable Long id) {
+    public Subject getSubjectById(@PathVariable Long id) {
         return subjectService.getSubjectById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSubject( @PathVariable Long id) {
+    public void deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
     }
 
     @PutMapping("/{id}")
-    public Subject updateSubject(@PathVariable Long id,@RequestBody SubjectCreationRequest request) {
+    public SubjectCreationResponse updateSubject(@PathVariable Long id, @RequestBody SubjectCreationRequest request) {
         return subjectService.updateSubject(id, request);
     }
-
-
 }

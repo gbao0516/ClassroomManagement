@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubjectCreationRequest {
-    private String subjectCode;
-    private String subjectName;
-    private int credits;
-    private String description;
+public class EnrollmentCreationRequest {
+    private Long classId;
+    private Long studentId;
+    private String enrollStatus; // ACTIVE / DROPPED
 }

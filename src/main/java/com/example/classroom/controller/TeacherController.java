@@ -1,7 +1,7 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.DTO.Request.TeacherCreationRequest;
-import com.example.classroom.DTO.Request.TeacherCreationResponse;
+import com.example.classroom.DTO.Response.TeacherCreationResponse;
 import com.example.classroom.model.Teacher;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -11,34 +11,32 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api/teachers")
 public class TeacherController {
-    private TeacherService studentService;
+    private final TeacherService teacherService;
 
     @GetMapping
     public List<Teacher> getAllTeachers() {
-        return studentService.getAllTeachers();
+        return teacherService.getAllTeachers();
     }
 
     @PostMapping
-    public TeacherCreationResponse createTeacher(TeacherCreationRequest request) {
-        return studentService.createTeacher(request);
+    public TeacherCreationResponse createTeacher(@RequestBody TeacherCreationRequest request) {
+        return teacherService.createTeacher(request);
     }
 
     @GetMapping("/{id}")
-    public Teacher getTeacherById( @PathVariable Long id) {
-        return studentService.getTeacherById(id);
+    public Teacher getTeacherById(@PathVariable Long id) {
+        return teacherService.getTeacherById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTeacher( @PathVariable Long id) {
-        studentService.deleteTeacher(id);
+    public void deleteTeacher(@PathVariable Long id) {
+        teacherService.deleteTeacher(id);
     }
 
     @PutMapping("/{id}")
-    public Teacher updateTeacher(@PathVariable Long id,@RequestBody TeacherCreationRequest request) {
-        return studentService.updateTeacher(id, request);
+    public TeacherCreationResponse updateTeacher(@PathVariable Long id, @RequestBody TeacherCreationRequest request) {
+        return teacherService.updateTeacher(id, request);
     }
-
-
 }

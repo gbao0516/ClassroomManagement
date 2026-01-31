@@ -1,15 +1,9 @@
 package com.example.classroom.service;
 
-import com.example.classroom.DTO.Request.ClassroomCreationRequest;
-import com.example.classroom.DTO.Request.ClassroomCreationResponse;
 import com.example.classroom.DTO.Request.SubjectCreationRequest;
-import com.example.classroom.DTO.Request.SubjectCreationResponse;
-
-import com.example.classroom.mapper.SubjectMapper;
-import com.example.classroom.model.Classroom;
+import com.example.classroom.DTO.Response.SubjectCreationResponse;
 import com.example.classroom.model.Subject;
 import com.example.classroom.repository.SubjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +11,6 @@ import java.util.List;
 @Service
 public class SubjectService {
     private final SubjectRepository subjectRepository;
-
-    @Autowired
-    private SubjectMapper SubjectMapper;
 
     public SubjectService(SubjectRepository subjectRepository) {
         this.subjectRepository = subjectRepository;
@@ -29,45 +20,50 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
+    public SubjectCreationResponse createSubject(SubjectCreationRequest request) {
+        Subject subject = new Subject();
+        subject.setSubjectCode(request.getSubjectCode());
+        subject.setSubjectName(request.getSubjectName());
+        subject.setCredits(request.getCredits());
+        subject.setDescription(request.getDescription());
 
-    public SubjectCreationResponse createSubject(SubjectCreationRequest subject) {
-        Subject st = getSubjectById(subject.getSubjectId());
-        if (st != null) {
-            throw new IllegalArgumentException("Subject with ID " + subject.getSubjectId() + " already exists.");
-        }
-
-       subjectRepository.save(st);
-        return convertToResponse(st);
+        Subject savedSubject = subjectRepository.save(subject);
+        return convertToResponse(savedSubject);
     }
 
     public Subject getSubjectById(Long id) {
         return subjectRepository.findById(id).orElse(null);
     }
 
-    public Subject updateSubject(Long id, SubjectCreationRequest updatedSubject) {
+    public SubjectCreationResponse updateSubject(Long id, SubjectCreationRequest request) {
         Subject existingSubject = getSubjectById(id);
         if (existingSubject == null) {
             throw new IllegalArgumentException("Subject with ID " + id + " not found.");
         }
 
-        Subject sm = SubjectMapper.toSubject(updatedSubject);
-        return subjectRepository.save(sm);
+        existingSubject.setSubjectCode(request.getSubjectCode());
+        existingSubject.setSubjectName(request.getSubjectName());
+        existingSubject.setCredits(request.getCredits());
+        existingSubject.setDescription(request.getDescription());
+
+        Subject savedSubject = subjectRepository.save(existingSubject);
+        return convertToResponse(savedSubject);
     }
 
     public void deleteSubject(Long id) {
-        Subject existingSubject = getSubjectById(id);
-        if (existingSubject == null) {
+        if (!subjectRepository.existsById(id)) {
             throw new IllegalArgumentException("Subject with ID " + id + " not found.");
         }
         subjectRepository.deleteById(id);
     }
-    private SubjectCreationResponse convertToResponse(Subject savedSubject) {
-        SubjectCreationResponse response = new SubjectCreationResponse();
-        response.setSubjectId(savedSubject.getSubjectId());
-        response.setSubjectName(savedSubject.getSubjectName());
-        response.setDescription(savedSubject.getDescription());
 
+    private SubjectCreationResponse convertToResponse(Subject subject) {
+        SubjectCreationResponse response = new SubjectCreationResponse();
+        response.setSubjectId(subject.getSubjectId());
+        response.setSubjectCode(subject.getSubjectCode());
+        response.setSubjectName(subject.getSubjectName());
+        response.setCredits(subject.getCredits());
+        response.setDescription(subject.getDescription());
         return response;
     }
-
 }

@@ -1,8 +1,7 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.DTO.Request.ClassroomCreationRequest;
-import com.example.classroom.DTO.Request.ClassroomCreationResponse;
-import com.example.classroom.model.Classroom;
+import com.example.classroom.DTO.Response.ClassroomCreationResponse;
 import com.example.classroom.model.Classroom;
 import com.example.classroom.service.ClassService;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +13,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/classes")
 public class ClassroomController {
-    private ClassService classroomService;
+    private final ClassService classroomService;
+
     @GetMapping
     public List<Classroom> getAllClasses() {
         return classroomService.getAllClasss();
 
     }
+
     @PostMapping
-    public ClassroomCreationResponse createClassroom(ClassroomCreationRequest request) {
+    public ClassroomCreationResponse createClassroom(@RequestBody ClassroomCreationRequest request) {
         return classroomService.createClassroom(request);
     }
 
@@ -31,12 +32,12 @@ public class ClassroomController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteClassroom( @PathVariable Long id) {
+    public void deleteClassroom(@PathVariable Long id) {
         classroomService.deleteClass(id);
     }
 
     @PutMapping("/{id}")
-    public Classroom updateClassroom(@PathVariable Long id,@RequestBody ClassroomCreationRequest request) {
+    public Classroom updateClassroom(@PathVariable Long id, @RequestBody ClassroomCreationRequest request) {
         return classroomService.updateClass(id, request);
     }
 }
